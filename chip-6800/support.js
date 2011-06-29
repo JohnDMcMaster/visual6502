@@ -1,4 +1,4 @@
-// chip-specific support functions
+// 6800 chip-specific support functions
 //
 // may override function definitions made previously
 
