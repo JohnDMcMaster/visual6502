@@ -18,8 +18,19 @@
  * described in segdefs.js specially.
  *
  */
+ 
+/*
+Confirm the following:
+A "transistor" is really just the intersection of diffusion and poly
+ie it can be calcuated given the other two layers
+What role does this actually play?  Find function can find transistors, but the geometry doesn't usually seem to render
+	Highlighted during find
+*/
+
 var transdefs = [
-['t1',4,1,3,[10,10,20,200],[415,415,11,5,4566],false],
-['t2',5,3,2,[10,10,4000,4000],[230,230,10,4,2311],false],
+//Switching transistor
+['t1',4,2,3,[176,193,214,265],[415,415,11,5,4566],false],
+//Pullup transistors
+['t2',1,1,3,[177,191,96,144],[415,415,11,5,4566],true],
 ]
 

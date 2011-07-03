@@ -4,76 +4,64 @@
 
 chipname='uv';
 
-grChipSize=800;
+grChipSize=400;
 main_area_left_gutter = 0
+
+go_timeout = 1000
 
 ngnd = nodenames['gnd'];
 npwr = nodenames['vcc'];
 
 nodenamereset = 'reset';
 
-function setupTransistors() {
-	for(i in transdefs) {
-		var tdef = transdefs[i];
-		var name = tdef[0];
-		var gate = tdef[1];
-		var c1 = tdef[2];
-		var c2 = tdef[3];
-		var bb = tdef[4];
-		if(tdef[6]) {
-			// just ignore all the 'weak' transistors for now
-			continue;
-		}
-		//Make C1 more "important" than C2
-		//That is if we don't 
-		if(c1==ngnd) {
-			c1=c2;c2=ngnd;
-		}
-		if(c1==npwr) {
-			c1=c2;
-			c2=npwr;
-		}
-		var trans = {name: name, on: false, gate: gate, c1: c1, c2: c2, bb: bb};
-		//alert("name: " + trans.name + ", gate: " + trans.gate + ", c1: " + trans.c1 + ", c2: " + trans.c2 + ", bb: " + trans.bb );
-		nodes[gate].gates.push(trans);
-		nodes[c1].c1c2s.push(trans);
-		nodes[c2].c1c2s.push(trans);
-		transistors[name] = trans;
-	}
-}
-
-
 function initChip(){
+	/*
+	Get the chip into a chip specific initial state
+	*/
+	
+	//For benchmarking and such
 	var start = now();
+	
+	//All nodes off and 
 	for(var nn in nodes) {
 		nodes[nn].state = false;
 		nodes[nn].float = true;
 	}
 
+	//Initialize GND
 	nodes[ngnd].state = false;
 	nodes[ngnd].float = false;
+	//Initialize VDD
 	nodes[npwr].state = true;
 	nodes[npwr].float = false;
+	//Default all transistors to off
+	//Important since it will determine how we will propagate changes
 	for(var tn in transistors) {
 		transistors[tn].on = false;
 	}
+	
+	transistors['t1'].on = false;
+	//Generate a baseline
+	//Try to generate a stable state given the above
 	recalcNodeList(allNodes()); 
 	refresh();
 	cycle = 0;
 	trace = Array();
+	running = true;
 }
 
-function listActiveTCStates() {
-	return "";
-}
-
-function chipStatus(){
-	//updateLogbox(logThese);
-}
-
-// javascript derived from http://segher.ircgeeks.net/6800/OPS
-var disassembly={
-0x00: "!",
-0x01: "nop",
-};
+/*
+Simple logic chip stubs
+*/
+/*
+Print registers and such, we have none
+Could use the input and output pins I guess if we really wanted to
+Used extensivly in macros.js
+*/
+function chipStatus(){}
+//Simple logic chips have no bus to read/write, skip over
+//Executed as part of clocking (halfStep()) in macros.js
+//Alternativly we could have just re-implemented these functions
+function handleBusRead() {}
+function handleBusWrite() {}
 

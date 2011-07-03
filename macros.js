@@ -65,6 +65,8 @@ function loadProgram(){
 		mWrite(0xfffd, userResetHigh);
 }
 
+go_timeout = 0
+
 function go(){
 	if(typeof userSteps != "undefined"){
 		if(--userSteps==0){
@@ -73,9 +75,9 @@ function go(){
 		}
 	}
 	if(running) {
-           step();
-	   setTimeout(go, 0); // schedule the next poll
-        }
+		step();
+		setTimeout(go, go_timeout); // schedule the next poll
+	}
 }
 
 function goUntilSync(){
@@ -413,7 +415,7 @@ function runChip(){
 	if(typeof running == "undefined")
 		initChip();
 	running = true;
-        go();
+	go();
 }
 
 function stopChip(){
