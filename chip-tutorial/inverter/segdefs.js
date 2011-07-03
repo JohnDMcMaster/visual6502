@@ -27,7 +27,7 @@ var segdefs = [
 [ 3,'+',5, 175,215, 193,213, 192,301, 176,301],
 
 /*
-Poly
+Diffusion
 */
 //Pullup
 //Left VDD
