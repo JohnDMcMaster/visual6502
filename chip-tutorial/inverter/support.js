@@ -64,4 +64,7 @@ function chipStatus(){}
 //Alternativly we could have just re-implemented these functions
 function handleBusRead() {}
 function handleBusWrite() {}
+//Stub implementation in case not using memtable.js
+//No memory to track
+function setupTable() {}
 
