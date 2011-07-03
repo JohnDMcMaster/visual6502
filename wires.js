@@ -25,6 +25,10 @@ var nodes = new Array();
 var transistors = {};
 var nodenamelist=[];
 
+//pixels of blank area in render.  Not related to the two gray areas
+main_area_left_gutter = 400
+background_color = '#000000'
+
 var ngnd = nodenames['vss'];
 var npwr = nodenames['vcc'];
 
@@ -44,17 +48,31 @@ function setupNodes(){
 	}
 }
 
-function setupTransistors(){
-	for(i in transdefs){
+function setupTransistors() {
+	for(i in transdefs) {
 		var tdef = transdefs[i];
 		var name = tdef[0];
 		var gate = tdef[1];
 		var c1 = tdef[2];
 		var c2 = tdef[3];
 		var bb = tdef[4];
-		if(c1==ngnd) {c1=c2;c2=ngnd;}
-		if(c1==npwr) {c1=c2;c2=npwr;}
+		if(tdef[6]) {
+			// just ignore all the 'weak' transistors for now
+			continue;
+		}
+		//Make C1 more "important" than C2
+		//That is if we don't 
+		if(c1==ngnd) {
+			c1=c2;c2=ngnd;
+		}
+		if(c1==npwr) {
+			c1=c2;
+			c2=npwr;
+		}
 		var trans = {name: name, on: false, gate: gate, c1: c1, c2: c2, bb: bb};
+		if (nodes[gate] == undefined) {
+			alert("node " + gate + " in transdefs but not in segdefs");
+		}
 		nodes[gate].gates.push(trans);
 		nodes[c1].c1c2s.push(trans);
 		nodes[c2].c1c2s.push(trans);
@@ -76,7 +94,7 @@ function setupBackground(){
 	chipbg.width = grCanvasSize;
 	chipbg.height = grCanvasSize;
 	var ctx = chipbg.getContext('2d');
-	ctx.fillStyle = '#000000';
+	ctx.fillStyle = background_color;
 	ctx.strokeStyle = 'rgba(255,255,255,0.5)';
 	ctx.lineWidth = grLineWidth;
 	ctx.fillRect(0,0,grCanvasSize,grCanvasSize);
@@ -204,17 +222,20 @@ function ctxDrawBox(ctx, xMin, yMin, xMax, yMax){
 function zoomToBox(xmin,xmax,ymin,ymax){
 	var xmid=(xmin+xmax)/2;
 	var ymid=(ymin+ymax)/2;
-	var x=(xmid+400)/grChipSize*600;
+	var x=(xmid+main_area_left_gutter)/grChipSize*600;
 	var y=600-ymid/grChipSize*600;
 	var zoom=5;  // pending a more careful calculation
 	moveHere([x,y,zoom]);
 }
 
 function drawSeg(ctx, seg){
-	var dx = 400;
+	var dx = main_area_left_gutter;
+		
 	ctx.beginPath();
-	ctx.moveTo(grScale(seg[0]+dx), grScale(grChipSize-seg[1]));
-	for(var i=2;i<seg.length;i+=2) ctx.lineTo(grScale(seg[i]+dx), grScale(grChipSize-seg[i+1]));
+	ctx.moveTo(grScale(seg[0] + dx), grScale(grChipSize-seg[1]));
+	for(var i=2;i<seg.length;i+=2) {
+		ctx.lineTo(grScale(seg[i]+dx), grScale(grChipSize-seg[i+1]));
+	}
 	ctx.lineTo(grScale(seg[0]+dx), grScale(grChipSize-seg[1]));
 }
 

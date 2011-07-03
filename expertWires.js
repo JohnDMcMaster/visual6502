@@ -100,6 +100,10 @@ function setup_part3(){
 	setTimeout(setup_part4, 0);
 }
 
+//Stub implementation in case not using memtable.js
+function setupTable() {
+}
+
 function setup_part4(){
 	setupTable();
 	setupNodeNameList();
