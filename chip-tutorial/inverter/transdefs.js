@@ -29,8 +29,8 @@ What role does this actually play?  Find function can find transistors, but the 
 
 var transdefs = [
 //Switching transistor
-['t1',4,2,3,[176,193,214,265],[415,415,11,5,4566],false],
+['t1',4,2,3,[176,193,96,144],[415,415,11,5,4566],false],
 //Pullup transistors
-['t2',1,1,3,[177,191,96,144],[415,415,11,5,4566],true],
+['t2',1,1,3,[177,191,214,265],[415,415,11,5,4566],true],
 ]
 
