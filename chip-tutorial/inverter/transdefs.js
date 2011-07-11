@@ -20,10 +20,8 @@
  */
  
 /*
-Confirm the following:
-A "transistor" is really just the intersection of diffusion and poly
-ie it can be calcuated given the other two layers
-What role does this actually play?  Find function can find transistors, but the geometry doesn't usually seem to render
+What role does transistor box actually play?  
+Find function can find transistors, but the geometry doesn't usually seem to render during simulation
 	Highlighted during find
 */
 
